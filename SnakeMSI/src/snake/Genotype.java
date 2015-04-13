@@ -24,6 +24,10 @@ public class Genotype
 	/* VARIABLES */
 	protected int[][] weights = null; //visible only for Genotype and Snake
 	
+	
+	
+	
+	
 	/* PUBLIC METHODS */
 	
 	public Genotype()
@@ -99,6 +103,12 @@ public class Genotype
 			crossed[j] = true;
 		}
 	}
+	
+	
+	
+	
+	
+	
 	
 	/* PRIVATE AUXILIARY FUNCTIONS */
 	void mutateGene(int i)

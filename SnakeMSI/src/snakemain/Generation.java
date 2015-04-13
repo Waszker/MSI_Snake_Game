@@ -68,6 +68,13 @@ public class Generation
 			}
 			
 		}
-			
+	}
+	
+	/**
+	 * <p>Getter for population.</p>
+	 */
+	public Snake[] getPopulation()
+	{
+		return population;
 	}
 }
