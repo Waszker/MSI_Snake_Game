@@ -77,4 +77,12 @@ public final class Generation
 	{
 		return population;
 	}
+	
+	/**
+	 * <p>Setter for population.</p>
+	 */
+	public void setPopulation(Snake[] p)
+	{
+		population = p;
+	}
 }
