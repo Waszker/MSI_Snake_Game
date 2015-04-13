@@ -12,22 +12,25 @@ public class Snake
 	public enum Movement { FORWARD, LEFT, RIGHT };
 	
 	/* VARIABLES */
-	private Genotype genotype = null;
-	private int score = 0;
+	private Genotype genotype;
+	private int score;
+	private boolean dead;
 	
 	/* METHODS */
 	
 	public Snake()
 	{
-		
+		genotype = null;
+		reset();
 	}
 	
 	/**
-	 * <p>Sets score to 0.</p>
+	 * <p>Sets score to 0 and dead to false.</p>
 	 */
-	public void resetScore()
+	public void reset()
 	{
 		score = 0;
+		dead = false;
 	}
 	
 	/**
@@ -36,6 +39,14 @@ public class Snake
 	public int getScore()
 	{
 		return score;
+	}
+	
+	/**
+	 * <p>Getter for dead.</p>
+	 */
+	public boolean isDead()
+	{
+		return dead;
 	}
 	
 	/**
@@ -56,18 +67,41 @@ public class Snake
 	}
 	
 	/**
-	 * <p>Setter for genotype.</p>
+	 * <p>
+	 * Performs crossing with other's snake genotype.
+	 * Calling snake is modified.
+	 * </p>
+	 * @param s snake to cross with
 	 */
-	public void setGenotype(Genotype g)
+	public void crossWith(Snake s)
 	{
-		genotype = g;
+		genotype.crossWith(s.genotype);
 	}
 	
 	/**
-	 * <p>Getter for genotype.</p>
+	 * <p>Performs snake genotype mutation.</p>
 	 */
-	public Genotype getGenotype()
+	public void mutate()
 	{
-		return genotype;
+		genotype.mutate();
+	}
+	
+	/**
+	 * <p>Clones and returns snake.</p>
+	 */
+	public Snake clone()
+	{
+		Snake ret = new Snake();
+		ret.genotype = genotype.clone();
+		return ret;
+	}
+	
+	/**
+	 * <p>Initializes snakes genotype randomly, approximately equal to zero.</p>
+	 */
+	public void init()
+	{
+		genotype = new Genotype();
+		genotype.init();
 	}
 }

@@ -19,11 +19,42 @@ public class Genotype
 	private static final int MAXCROSSGENS = 5;
 	private static final int MAXMUTATION = 2;
 	
+	private static final Random r = new Random();
+	
 	/* VARIABLES */
-	private static Random r = new Random();
-	private int[][] weights = new int[NUMGENS][3]; 
+	protected int[][] weights = null; //visible only for Genotype and Snake
 	
 	/* PUBLIC METHODS */
+	
+	public Genotype()
+	{
+		weights = new int[NUMGENS][3];
+	}
+	
+	/**
+	 * <p>Initializes genotype randomly, approximately equal to zero.</p>
+	 */
+	public void init()
+	{
+		for ( int i=0; i<NUMGENS; i++)
+		{
+			for ( int j=0; j<weights[i].length; j++ )
+				weights[i][j] = 0;
+			mutateGene(i);
+		}
+	}
+	
+	/**
+	 * <p>Clones and returns genotype.</p>
+	 */
+	public Genotype clone()
+	{
+		Genotype ret = new Genotype();
+		for ( int i=0; i<NUMGENS; i++)
+			for ( int j=0; j<weights[i].length; j++ )
+				ret.weights[i][j] = weights[i][j];
+		return ret;
+	}
 	
 	/**
 	 * <p>Performs genotype mutation.</p>
