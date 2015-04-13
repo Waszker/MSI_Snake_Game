@@ -1,14 +1,17 @@
 package snake;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Random;
 
 /**
  * <p>
- * Used as data structure containing weight for each action for given situations.
+ * Genotype class. Provides crossing, mutating, cloning.
  * </p>
  * @author Filip
  */
-public class Genotype
+final class Genotype
 {
 	/* CONSTANTS */
 	public  static final int NUMGENS = 20;
@@ -30,7 +33,7 @@ public class Genotype
 	
 	/* PUBLIC METHODS */
 	
-	public Genotype()
+	protected Genotype()
 	{
 		weights = new int[NUMGENS][3];
 	}
@@ -38,7 +41,7 @@ public class Genotype
 	/**
 	 * <p>Initializes genotype randomly, approximately equal to zero.</p>
 	 */
-	public void init()
+	protected void init()
 	{
 		for ( int i=0; i<NUMGENS; i++)
 		{
@@ -51,7 +54,7 @@ public class Genotype
 	/**
 	 * <p>Clones and returns genotype.</p>
 	 */
-	public Genotype clone()
+	protected Genotype clone()
 	{
 		Genotype ret = new Genotype();
 		for ( int i=0; i<NUMGENS; i++)
@@ -63,7 +66,7 @@ public class Genotype
 	/**
 	 * <p>Performs genotype mutation.</p>
 	 */
-	public void mutate()
+	protected void mutate()
 	{
 		boolean[] mutated = new boolean[NUMGENS];
 		for ( int i=0; i<mutated.length; i++ )mutated[i] = false;
@@ -85,7 +88,7 @@ public class Genotype
 	 * <p>Modifies calling genotype by crossing it with another one.</p>
 	 * @param g genotype to cross calling genotype with
 	 */
-	public void crossWith(Genotype g)
+	protected void crossWith(Genotype g)
 	{
 		boolean[] crossed = new boolean[NUMGENS];
 		for ( int i=0; i<crossed.length; i++ )crossed[i] = false;
@@ -104,14 +107,34 @@ public class Genotype
 		}
 	}
 	
+	/**
+	 * <p>Saves genotype to given output stream.</p>
+	 * @throws IOException
+	 */
+	protected void save(OutputStream o) throws IOException
+	{
+		for ( int i=0; i<NUMGENS; i++)
+			for ( int j=0; j<weights[i].length; j++ )
+				o.write(weights[i][j]);
+	}
 	
+	/**
+	 * <p>Loads genotype from given input stream.</p>
+	 * @throws IOException 
+	 */
+	protected void load(InputStream in) throws IOException
+	{
+		for ( int i=0; i<NUMGENS; i++)
+			for ( int j=0; j<weights[i].length; j++ )
+				weights[i][j] = (byte)in.read();
+	}
 	
 	
 	
 	
 	
 	/* PRIVATE AUXILIARY FUNCTIONS */
-	void mutateGene(int i)
+	private void mutateGene(int i)
 	{
 		for ( int j=0; j<weights[i].length; j++ )
 			weights[i][j] += r.nextInt(2*MAXMUTATION+1)-MAXMUTATION-1;

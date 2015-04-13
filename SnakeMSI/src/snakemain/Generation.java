@@ -6,7 +6,7 @@ import java.util.Random;
 
 import snake.Snake;
 
-public class Generation
+public final class Generation
 {
 	/* CONSTANTS */
 	private static final int PERCENTOFMUTATIONS = 20;

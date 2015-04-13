@@ -1,12 +1,16 @@
 package snake;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * <p>
  * Snake class. Provides: decisions and score counting.
  * </p>
  * @author Filip
  */
-public class Snake
+public final class Snake
 {
 	/* ENUMS */
 	public enum Movement { FORWARD, LEFT, RIGHT };
@@ -20,7 +24,7 @@ public class Snake
 	
 	public Snake()
 	{
-		genotype = null;
+		genotype = new Genotype();
 		reset();
 	}
 	
@@ -101,7 +105,24 @@ public class Snake
 	 */
 	public void init()
 	{
-		genotype = new Genotype();
 		genotype.init();
+	}
+	
+	/**
+	 * <p>Saves genotype to given output stream.</p>
+	 * @throws IOException
+	 */
+	public void save(OutputStream o) throws IOException
+	{
+		genotype.save(o);
+	}
+	
+	/**
+	 * <p>Loads genotype from given input stream.</p>
+	 * @throws IOException 
+	 */
+	public void load(InputStream in) throws IOException
+	{
+		genotype.load(in);
 	}
 }
