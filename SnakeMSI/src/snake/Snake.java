@@ -66,7 +66,7 @@ public final class Snake
 	 */
 	public Movement move(byte[][] neighbourhood)
 	{
-		//TODO: Complete
+		//TODO: Complete decision process
 		return Movement.FORWARD;
 	}
 	
