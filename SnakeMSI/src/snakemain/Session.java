@@ -77,12 +77,17 @@ public class Session
 		in.close();
 	}
 	
-	public void singleCycle(/*Display display*/)
+	/**
+	 * <p>Performs single generation evolution. If display is not null, it provides preview online.</p>
+	 * @param display drawing output, can be null
+	 * @param simulationSpeed speed of the simulation preview, ignored when display is null
+	 */
+	public void singleCycle(/*Display display, double simulationSpeed*/)
 	{
 		/*
 		 * zainicjuj symulacje;
 		 * odpal symulacje (display);
-		 * semaphore.acquile(populationSize);
+		 * semaphore.acquile(populationSize); //poczekaj na wszystkie symulacje
 		 * currentGeneration.evaluate();
 		 */
 	}
