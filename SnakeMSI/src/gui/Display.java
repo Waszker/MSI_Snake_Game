@@ -43,8 +43,8 @@ public class Display extends JPanel
 		if (null != map)
 		{
 			int x = 0, y = 0;
-			int a = this.getWidth() / map.length, b = this.getHeight()
-					/ map[0].length;
+			int a = this.getWidth() / map[0].length, b = this.getHeight()
+					/ map.length;
 
 			for (int i = 0; i < map.length; i++, y += b)
 			{
