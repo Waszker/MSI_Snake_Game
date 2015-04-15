@@ -156,7 +156,7 @@ public class Session
 				while (!s.isSnakeDead())
 				{
 					s.singleStep();
-					display.updateView(s.getMap());
+					if ( display != null )display.updateView(s.getMap());
 					try
 					{
 						Thread.sleep(1);
@@ -168,6 +168,6 @@ public class Session
 					}
 				}
 			}
-		})).start();
+		})).run();
 	}
 }
