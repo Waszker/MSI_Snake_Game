@@ -89,20 +89,39 @@ public class Session
 	public void singleCycle(/*Display display, double simulationSpeed*/)
 	{
 		resetSimulations();
-		//runSimulations(display);
-		//waitForSimulations();
+		runSimulations(/*display, simulationSpeed*/);
 		currentGeneration.evaluate();
 	}
 	
 	
 	/* PRIVATE AUXILIARY FUNCTIONS */
 	
-	void resetSimulations()
+	private void resetSimulations()
 	{
 		final long randSeed = r.nextLong();
 		final Snake[] currentSnakes = currentGeneration.getPopulation();
 		
 		for ( int i=0; i<currentSnakes.length; i++ )
 			simulations[i].resetSimulation(currentSnakes[i], randSeed);
+	}
+	
+	private void runSimulations(/*Display, simulationSpeed*/)
+	{
+		//TODO: Complete
+		
+		/*
+		 * for each simulation s in simulations
+		 * {
+		 * 		run thread
+		 * 		{
+		 * 			while ( !s.isSnakeDead() )
+		 * 			{
+		 * 				s.singleStep();
+		 * 				display( s.getMap() );
+		 * 			}
+		 * 		}
+		 * }
+		 * 
+		 */
 	}
 }

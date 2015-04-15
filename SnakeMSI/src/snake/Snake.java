@@ -18,7 +18,6 @@ public final class Snake
 	/* VARIABLES */
 	private Genotype genotype;
 	private int score;
-	private boolean dead;
 	
 	/* METHODS */
 	
@@ -34,7 +33,11 @@ public final class Snake
 	public void reset()
 	{
 		score = 0;
-		dead = false;
+	}
+	
+	public void increaseScore(int points)
+	{
+		score += points;
 	}
 	
 	/**
@@ -45,21 +48,13 @@ public final class Snake
 		return score;
 	}
 	
-	/**
-	 * <p>Getter for dead.</p>
-	 */
-	public boolean isDead()
-	{
-		return dead;
-	}
 	
 	/**
 	 * <p>
 	 * Performs snake decision process depending on genotype.
 	 * For each situation which occures, weights for snake actions are sumed up.
 	 * Result action (Movement) is the one, which has the greatest weight sum.
-	 * Then checks if the snake hit an obstacle - then sets dead=true.
-	 * Otherwise increases the score.
+	 * Increases the score.
 	 * </p>
 	 * @param neighbourhood 9x9 array of map bytes oriented according to snake direction
 	 * @return the result action
