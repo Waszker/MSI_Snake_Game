@@ -26,7 +26,10 @@ public final class Generation
 	{
 		population = new Snake[populationSize];
 		for ( int i=0; i<populationSize; i++ )
+		{
+			population[i] = new Snake();
 			population[i].init();
+		}
 	}
 	
 	/**
@@ -40,7 +43,7 @@ public final class Generation
 			@Override
 			public int compare(Snake o1, Snake o2)
 			{
-				int ret = o1.getScore()-o2.getScore();
+				int ret = o2.getScore()-o1.getScore();
 				if ( ret == 0 )return 0;
 				if ( ret > 0  )return 1;
 				return -1;
