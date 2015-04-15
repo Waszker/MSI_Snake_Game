@@ -1,7 +1,5 @@
 package tests;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.junit.Test;
 
 import snake.Snake;
