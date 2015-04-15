@@ -34,15 +34,26 @@ public final class Snake
 	}
 	
 	/**
-	 * <p>Sets score to 0 and dead to false.</p>
+	 * <p>Resets snake state to beginning.</p>
 	 */
 	public void reset()
 	{
-		score = 0;
 		prev = Movement.FORWARD;
 		prevprev = Movement.FORWARD;
 	}
 	
+	/**
+	 * <p>Sets score to 0.</p>
+	 */
+	public void resetScore()
+	{
+		score = 0;
+	}
+	
+	/**
+	 * <p>Adds given number to score.</p>
+	 * @param points
+	 */
 	public void increaseScore(int points)
 	{
 		score += points;
