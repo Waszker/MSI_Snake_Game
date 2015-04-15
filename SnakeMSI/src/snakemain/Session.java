@@ -176,8 +176,7 @@ public class Session
 				while (!s.isSnakeDead())
 				{
 					s.singleStep();
-					if (display != null)
-						display.updateView(s.getMap());
+					display.updateView(s.getMap());
 					try
 					{
 						Thread.sleep(1);

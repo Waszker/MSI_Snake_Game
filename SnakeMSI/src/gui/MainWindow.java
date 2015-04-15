@@ -62,8 +62,16 @@ public class MainWindow extends JFrame
 
 	public void runSimulation()
 	{
-		session.singleCycle(displays,
-				(Integer) numberOfIterationsJSpinner.getValue());
+		new Thread(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				session.singleCycle(displays,
+						(Integer) numberOfIterationsJSpinner.getValue());
+			}
+		}).start();
 	}
 
 	private void createLayout()
