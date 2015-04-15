@@ -36,6 +36,22 @@ public final class Snake
 	}
 	
 	/**
+	 * <p>Getter for previous move</p>
+	 */
+	public Movement getPrev()
+	{
+		return prev;
+	}
+	
+	/**
+	 * <p>Getter for previous to previous move</p>
+	 */
+	public Movement getPrevprev()
+	{
+		return prevprev;
+	}
+	
+	/**
 	 * <p>Resets snake state to beginning.</p>
 	 */
 	public void reset()

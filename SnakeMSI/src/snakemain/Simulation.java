@@ -113,15 +113,31 @@ public class Simulation
 	{
 		if ( snakeDead )return;
 		
-		Movement nextMovement;
+		Movement nextMovement, prev = snake.getPrev(), prevprev = snake.getPrevprev();
 		
 		calculateSnakePerspective();
 		calculateApplePos();
 		nextMovement = snake.decision(snakePerspective, applePosX, applePosY);
 		calculateTargetCoordsAndDirection(nextMovement);
 		handleMovementToTarget();
+		
 		if ( nextMovement == Movement.FORWARD )
-			snake.increaseScore(2);
+		{
+			if ( prev == Movement.FORWARD )
+			{
+				if ( prevprev == Movement.FORWARD )
+					snake.increaseScore(8);
+				else
+					snake.increaseScore(4);
+			}
+			else snake.increaseScore(2);
+		}
+		
+		else
+		{
+			if ( prev == Movement.FORWARD || prevprev == Movement.FORWARD )
+				snake.increaseScore(1);
+		}
 	}
 	
 	
@@ -295,8 +311,6 @@ public class Simulation
 			map[last.x][last.y] = Field.EMPTY;
 			snakeTail.remove(last);
 		}
-		
-		snake.increaseScore(1);
 	}
 	
 	private void calculateTargetCoordsAndDirection(Movement nextMove)
