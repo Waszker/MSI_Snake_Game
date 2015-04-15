@@ -49,7 +49,7 @@ public class SimulationTests
 			Thread.sleep(200);
 		}
 	}
-	
+	/*
 	@Test
 	public void snakePerspectiveTestWithPreview() throws InterruptedException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
 	{
@@ -75,6 +75,6 @@ public class SimulationTests
 			s.singleStep();
 			Thread.sleep(200);
 		}
-	}
+	}*/
 
 }
