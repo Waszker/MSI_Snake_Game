@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
+import snakemain.Simulation.Field;
+
 /**
  * <p>
  * Genotype class. Provides crossing, mutating, cloning.
@@ -15,6 +17,7 @@ final class Genotype
 {
 	/* CONSTANTS */
 	public  static final int NUMGENS = 20;
+	public  static final int NUMACTIONS = 3;
 	
 	private static final int MINMUTATEGENS = 2;
 	private static final int MAXMUTATEGENS = 5;
@@ -26,7 +29,7 @@ final class Genotype
 	
 	/* VARIABLES */
 	protected int[][] weights = null; //visible only for Genotype and Snake
-	
+	private int[] sum = null;
 	
 	
 	
@@ -35,7 +38,25 @@ final class Genotype
 	
 	protected Genotype()
 	{
-		weights = new int[NUMGENS][3];
+		weights = new int[NUMGENS][NUMACTIONS];
+		sum = new int[NUMACTIONS];
+	}
+	
+	/**
+	 * @param neighbourhood nearest fields from snakes perspective
+	 * @return sumed weights for all 'active' genes
+	 */
+	public int[] weightsForSituation(Field[][] neighbourhood)
+	{
+		for ( int i=0; i<NUMACTIONS; i++ )
+			sum[i] = 0;
+		
+		for ( int i=0; i<NUMGENS; i++ )
+			if ( geneActive(i, neighbourhood) )
+				for ( int j=0; j<NUMACTIONS; j++ )
+					sum[j] += weights[i][j];
+		
+		return sum;
 	}
 	
 	/**
@@ -138,5 +159,14 @@ final class Genotype
 	{
 		for ( int j=0; j<weights[i].length; j++ )
 			weights[i][j] += r.nextInt(2*MAXMUTATION+1)-MAXMUTATION-1;
+	}
+	
+	private boolean geneActive(int i, Field[][] neighbourhood)
+	{
+		if ( i == 0 && neighbourhood[0][1] == Field.APPLE )
+			return true;
+		//TODO: Complete
+		
+		return false;
 	}
 }

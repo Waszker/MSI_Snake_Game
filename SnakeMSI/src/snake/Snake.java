@@ -21,12 +21,14 @@ public final class Snake
 	/* VARIABLES */
 	private Genotype genotype;
 	private int score;
+	private Random r;
 	
 	/* METHODS */
 	
 	public Snake()
 	{
 		genotype = new Genotype();
+		r = new Random();
 		reset();
 	}
 	
@@ -50,8 +52,6 @@ public final class Snake
 	{
 		return score;
 	}
-	
-	Random r = new Random(); //TODO: Delete
 	/**
 	 * <p>
 	 * Performs snake decision process depending on genotype.
@@ -63,13 +63,23 @@ public final class Snake
 	 */
 	public Movement decision(Simulation.Field[][] neighbourhood)
 	{
-		//TODO: Complete decision process
+		int[] sum = genotype.weightsForSituation(neighbourhood);
+		int result = 0;
+		for ( int i=1; i<Genotype.NUMACTIONS; i++ )
+		{
+			if ( (sum[i] > sum[result])||(sum[i] == sum[result] && r.nextBoolean()) )
+				result = i;
+		}
 		
-		int det = r.nextInt(7);
-		if ( det < 5 )return Movement.FORWARD;
-		if ( det == 5 )return Movement.RIGHT;
-		return Movement.LEFT;
-		
+		switch ( result )
+		{
+		case 0:
+			return Movement.FORWARD;
+		case 1:
+			return Movement.RIGHT;
+		default:
+			return Movement.LEFT;
+		}
 	}
 	
 	/**
