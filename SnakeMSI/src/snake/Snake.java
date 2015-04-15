@@ -22,7 +22,7 @@ public final class Snake
 	
 	/* VARIABLES */
 	private Genotype genotype;
-	private int score;
+	private long score;
 	private Random r;
 	private Movement prev, prevprev;
 	
@@ -64,7 +64,7 @@ public final class Snake
 	/**
 	 * <p>Getter for score.</p>
 	 */
-	public int getScore()
+	public long getScore()
 	{
 		return score;
 	}

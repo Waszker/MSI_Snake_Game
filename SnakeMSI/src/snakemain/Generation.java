@@ -49,7 +49,7 @@ public final class Generation
 			@Override
 			public int compare(Snake o1, Snake o2)
 			{
-				int ret = o2.getScore() - o1.getScore();
+				long ret = o2.getScore() - o1.getScore();
 				if (ret == 0)
 					return 0;
 				if (ret > 0)

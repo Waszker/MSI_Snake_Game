@@ -113,10 +113,15 @@ public class Simulation
 	{
 		if ( snakeDead )return;
 		
+		Movement nextMovement;
+		
 		calculateSnakePerspective();
 		calculateApplePos();
-		calculateTargetCoordsAndDirection(snake.decision(snakePerspective, applePosX, applePosY));
+		nextMovement = snake.decision(snakePerspective, applePosX, applePosY);
+		calculateTargetCoordsAndDirection(nextMovement);
 		handleMovementToTarget();
+		if ( nextMovement == Movement.FORWARD )
+			snake.increaseScore(2);
 	}
 	
 	
