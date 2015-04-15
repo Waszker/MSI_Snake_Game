@@ -112,11 +112,11 @@ public class Session
 	 */
 	public void singleCycle(Display[] displays, int numberOfIterations)
 	{
-		while (numberOfIterations > 0)
+		resetScores();
+		while ( (numberOfIterations--) > 0)
 		{
 			resetSimulations();
 			runSimulations(displays);
-			numberOfIterations--;
 		}
 		currentGeneration.evaluate();
 	}
@@ -130,6 +130,13 @@ public class Session
 
 		for (int i = 0; i < currentSnakes.length; i++)
 			simulations[i].resetSimulation(currentSnakes[i], randSeed);
+	}
+	
+	private void resetScores()
+	{
+		final Snake[] currentSnakes = currentGeneration.getPopulation();
+		for (int i = 0; i < currentSnakes.length; i++)
+			currentSnakes[i].resetScore();
 	}
 
 	private void runSimulations(final Display[] displays)
