@@ -112,9 +112,9 @@ public class Session
 	 */
 	public void singleCycle(Display[] displays, int numberOfIterations)
 	{
-		resetSimulations();
 		while (numberOfIterations > 0)
 		{
+			resetSimulations();
 			runSimulations(displays);
 			numberOfIterations--;
 		}
@@ -135,20 +135,33 @@ public class Session
 	private void runSimulations(final Display[] displays)
 	{
 		Integer i = 0;
+		Thread[] threads = new Thread[displays.length];
 		for (final Simulation s : simulations)
 		{
-			runSimulation(s, displays[i++]);
+			threads[i] = runSimulation(s, displays[i++]);
 		}
 
+		for(Thread t : threads)
+		{
+			try
+			{
+				t.join();
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		/*
 		 * for each simulation s in simulations { run thread { while (
 		 * !s.isSnakeDead() ) { s.singleStep(); display( s.getMap() ); } } }
 		 */
 	}
 
-	private void runSimulation(final Simulation s, final Display display)
+	private Thread runSimulation(final Simulation s, final Display display)
 	{
-		(new Thread(new Runnable()
+		Thread thread = (new Thread(new Runnable()
 		{
 			@Override
 			public void run()
@@ -156,7 +169,8 @@ public class Session
 				while (!s.isSnakeDead())
 				{
 					s.singleStep();
-					if ( display != null )display.updateView(s.getMap());
+					if (display != null)
+						display.updateView(s.getMap());
 					try
 					{
 						Thread.sleep(1);
@@ -168,6 +182,9 @@ public class Session
 					}
 				}
 			}
-		})).start();
+		}));
+		thread.start();
+		
+		return thread;
 	}
 }
