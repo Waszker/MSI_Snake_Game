@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import snake.Snake;
 
@@ -23,6 +24,8 @@ public class Session
 {
 	/* VARIABLES */
 	private Generation currentGeneration = new Generation();
+	private Simulation[] simulations = null;
+	private Random r = new Random();
 	
 	/* METHODS */
 	
@@ -33,6 +36,7 @@ public class Session
 	public void init(int populationSize)
 	{
 		currentGeneration.init(populationSize);
+		simulations = new Simulation[populationSize];
 	}
 	
 	/**
@@ -84,11 +88,21 @@ public class Session
 	 */
 	public void singleCycle(/*Display display, double simulationSpeed*/)
 	{
-		/*
-		 * zainicjuj symulacje;
-		 * odpal symulacje (display);
-		 * semaphore.acquile(populationSize); //poczekaj na wszystkie symulacje
-		 * currentGeneration.evaluate();
-		 */
+		resetSimulations();
+		//runSimulations(display);
+		//waitForSimulations();
+		currentGeneration.evaluate();
+	}
+	
+	
+	/* PRIVATE AUXILIARY FUNCTIONS */
+	
+	void resetSimulations()
+	{
+		final long randSeed = r.nextLong();
+		final Snake[] currentSnakes = currentGeneration.getPopulation();
+		
+		for ( int i=0; i<currentSnakes.length; i++ )
+			simulations[i].resetSimulation(currentSnakes[i], randSeed);
 	}
 }
