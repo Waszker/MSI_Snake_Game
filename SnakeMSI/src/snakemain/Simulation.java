@@ -111,33 +111,9 @@ public class Simulation
 		Movement nextMove;
 		
 		getSnakePerspective();
-		nextMove = snake.move(snakePerspective);
+		nextMove = snake.decision(snakePerspective);
 		calculateTargetCoords(nextMove);
-		
-		// I
-		if ( map[targetX][targetY] == Field.SNAKE || map[targetX][targetY] == Field.WALL )
-		{
-			snakeDead = true;
-			return;
-		}
-		
-		if ( map[targetX][targetY] == Field.APPLE )
-		{
-			snake.increaseScore(APPLESCORE);
-			doMove(targetX,targetY);
-			generateNewApple();
-		}
-		
-		else
-		{
-			snake.increaseScore(1);
-			doMove(targetX, targetY);
-			if ( (++currentMovesWithoutApple) >= MOVESWITHOUTAPPLELIMIT )
-			{
-				snakeDead = true;
-				return;
-			}
-		}
+		handleMovementToTargetCoords();
 	}
 	
 	
@@ -188,6 +164,34 @@ public class Simulation
 			for ( int x=0; x<3; x++ )
 				for ( int y=0; y<3; y++ )
 					snakePerspective[2-y][2-x] = map[snakePosX+x-1][snakePosY+y-1];
+		}
+	}
+	
+	private void handleMovementToTargetCoords()
+	{
+		if ( map[targetX][targetY] == Field.SNAKE || map[targetX][targetY] == Field.WALL )
+		{
+			snakeDead = true;
+			return;
+		}
+		
+		if ( map[targetX][targetY] == Field.APPLE )
+		{
+			currentMovesWithoutApple = 0;
+			snake.increaseScore(APPLESCORE);
+			doMove(targetX,targetY);
+			generateNewApple();
+		}
+		
+		else
+		{
+			snake.increaseScore(1);
+			doMove(targetX, targetY);
+			if ( (++currentMovesWithoutApple) >= MOVESWITHOUTAPPLELIMIT )
+			{
+				snakeDead = true;
+				return;
+			}
 		}
 	}
 	

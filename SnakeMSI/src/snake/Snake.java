@@ -60,7 +60,7 @@ public final class Snake
 	 * @param neighbourhood 9x9 array of map bytes oriented according to snake direction
 	 * @return the result action
 	 */
-	public Movement move(Simulation.Field[][] neighbourhood)
+	public Movement decision(Simulation.Field[][] neighbourhood)
 	{
 		//TODO: Complete decision process
 		return Movement.FORWARD;
