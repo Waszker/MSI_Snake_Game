@@ -23,10 +23,11 @@ final class Genotype
 	public  static final int NUMACTIONS = 3;
 	
 	private static final int MINMUTATEGENS = 2;
-	private static final int MAXMUTATEGENS = 5;
+	private static final int MAXMUTATEGENS = 4;
+	private static final int MAXMUTATION = 10;
+	
 	private static final int MINCROSSGENS = 4;
 	private static final int MAXCROSSGENS = 8;
-	private static final int MAXMUTATION = 2;
 	
 	private static final Random r = new Random();
 	

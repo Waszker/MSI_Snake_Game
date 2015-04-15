@@ -55,6 +55,7 @@ public class Simulation
 	private int targetX, targetY;
 	private AppleposX applePosX = null;
 	private AppleposY applePosY = null;
+	private boolean even = false;
 	
 	/* METHODS */
 	
@@ -135,7 +136,9 @@ public class Simulation
 		
 		else
 		{
-			if ( prev == Movement.FORWARD || prevprev == Movement.FORWARD )
+			if ( prev == Movement.FORWARD )
+				snake.increaseScore(1);
+			else if ( prevprev == Movement.FORWARD && (even=!even) )
 				snake.increaseScore(1);
 		}
 	}

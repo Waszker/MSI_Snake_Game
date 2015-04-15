@@ -9,7 +9,7 @@ import snake.Snake;
 public final class Generation
 {
 	/* CONSTANTS */
-	private static final int PERCENTOFMUTATIONS = 20;
+	private static final int PERCENTOFMUTATIONS = 50;
 	private static final Random r = new Random();
 
 	/* VARIABLES */
