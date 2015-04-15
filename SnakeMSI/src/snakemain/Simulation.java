@@ -132,8 +132,6 @@ public class Simulation
 		
 		map[snakePosX][snakePosY] = Field.SNAKE;
 		generateNewApple();
-		
-		for ( int i=0; i<80; i++ )generateNewApple();//TODO: Delete
 	}
 	
 	private void calculateSnakePerspective()
@@ -156,14 +154,14 @@ public class Simulation
 		{
 			for ( int x=0; x<3; x++ )
 				for ( int y=0; y<3; y++ )
-					snakePerspective[y][x] = map[snakePosX+x-1][snakePosY+y-1];
+					snakePerspective[y][2-x] = map[snakePosX+x-1][snakePosY+y-1];
 		}
 		
 		else //LEFT
 		{
 			for ( int x=0; x<3; x++ )
 				for ( int y=0; y<3; y++ )
-					snakePerspective[2-y][2-x] = map[snakePosX+x-1][snakePosY+y-1];
+					snakePerspective[2-y][x] = map[snakePosX+x-1][snakePosY+y-1];
 		}
 	}
 	
