@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import snakemain.Simulation;
+
 /**
  * <p>
  * Snake class. Provides: decisions and score counting.
@@ -54,12 +56,11 @@ public final class Snake
 	 * Performs snake decision process depending on genotype.
 	 * For each situation which occures, weights for snake actions are sumed up.
 	 * Result action (Movement) is the one, which has the greatest weight sum.
-	 * Increases the score.
 	 * </p>
 	 * @param neighbourhood 9x9 array of map bytes oriented according to snake direction
 	 * @return the result action
 	 */
-	public Movement move(byte[][] neighbourhood)
+	public Movement move(Simulation.Field[][] neighbourhood)
 	{
 		//TODO: Complete decision process
 		return Movement.FORWARD;
