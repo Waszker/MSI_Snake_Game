@@ -165,7 +165,7 @@ final class Genotype
 	{
 		if ( i == 0 && neighbourhood[0][1] == Field.APPLE )
 			return true;
-		//TODO: Complete
+		//TODO: Complete which genes are responsible for which situations
 		
 		return false;
 	}
