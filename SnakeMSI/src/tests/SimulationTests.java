@@ -1,5 +1,7 @@
 package tests;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.Test;
 
 import snake.Snake;
@@ -44,7 +46,34 @@ public class SimulationTests
 		{
 			render(s.getMap());
 			s.singleStep();
-			Thread.sleep(300);
+			Thread.sleep(200);
+		}
+	}
+	
+	@Test
+	public void snakePerspectiveTestWithPreview() throws InterruptedException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
+	{
+		Simulation s = new Simulation();
+		Snake snake = new Snake();
+		
+		snake.init();
+		s.resetSimulation(snake, 10);
+		
+		java.lang.reflect.Field snakePerspective = Simulation.class.getDeclaredField("snakePerspective");
+		snakePerspective.setAccessible(true);
+		
+		java.lang.reflect.Method calculateSnakePerspective = 
+				Simulation.class.getDeclaredMethod("calculateSnakePerspective");
+		calculateSnakePerspective.setAccessible(true);
+		
+		while ( !s.isSnakeDead() )
+		{
+			render(s.getMap());
+			calculateSnakePerspective.invoke(s);
+			render((Field[][])snakePerspective.get(s));
+			
+			s.singleStep();
+			Thread.sleep(200);
 		}
 	}
 
