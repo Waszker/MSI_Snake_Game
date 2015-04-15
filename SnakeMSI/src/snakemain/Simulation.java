@@ -110,7 +110,7 @@ public class Simulation
 		if ( snakeDead )return;
 		
 		calculateSnakePerspective();
-		calculateTargetCoords(snake.decision(snakePerspective));
+		calculateTargetCoordsAndDirection(snake.decision(snakePerspective));
 		handleMovementToTarget();
 	}
 	
@@ -132,6 +132,8 @@ public class Simulation
 		
 		map[snakePosX][snakePosY] = Field.SNAKE;
 		generateNewApple();
+		
+		for ( int i=0; i<80; i++ )generateNewApple();//TODO: Delete
 	}
 	
 	private void calculateSnakePerspective()
@@ -179,14 +181,14 @@ public class Simulation
 		{
 			currentMovesWithoutApple = 0;
 			snake.increaseScore(APPLESCORE);
-			doMoveToTarget();
+			doMoveToTarget(false);
 			generateNewApple();
 		}
 		
 		//normal move
 		else
 		{
-			doMoveToTarget();
+			doMoveToTarget(true);
 			if ( (++currentMovesWithoutApple) >= MOVESWITHOUTAPPLELIMIT )
 			{
 				snakeDead = true;
@@ -207,23 +209,26 @@ public class Simulation
 		map[x][y] = Field.APPLE;
 	}
 	
-	private void doMoveToTarget()
+	private void doMoveToTarget(boolean shorten)
 	{
-		Point last = snakeTail.get(snakeTail.size()-1);
+		Point last = snakeTail.get(0);
 		
 		snakePosX = targetX;
 		snakePosY = targetY;
 		
-		map[snakePosX][snakePosY] = Field.SNAKE;
-		map[last.x][last.y] = Field.EMPTY; 
-		
-		snakeTail.remove(last);
+		map[snakePosX][snakePosY] = Field.SNAKE; 
 		snakeTail.add(new Point(snakePosX,snakePosY));
+		
+		if ( shorten )
+		{
+			map[last.x][last.y] = Field.EMPTY;
+			snakeTail.remove(last);
+		}
 		
 		snake.increaseScore(1);
 	}
 	
-	private void calculateTargetCoords(Movement nextMove)
+	private void calculateTargetCoordsAndDirection(Movement nextMove)
 	{
 		targetX = snakePosX;
 		targetY = snakePosY;
@@ -237,14 +242,16 @@ public class Simulation
 					break;
 				case LEFT:
 					targetX--;
+					snakeDirection = Direction.LEFT;
 					break;
 				case RIGHT:
 					targetX++;
+					snakeDirection = Direction.RIGHT;
 					break;
 			}
 		}
 		
-		if ( snakeDirection == Direction.DOWN )
+		else if ( snakeDirection == Direction.DOWN )
 		{
 			switch (nextMove)
 			{
@@ -253,14 +260,16 @@ public class Simulation
 					break;
 				case LEFT:
 					targetX++;
+					snakeDirection = Direction.RIGHT;
 					break;
 				case RIGHT:
 					targetX--;
+					snakeDirection = Direction.LEFT;
 					break;
 			}
 		}
 		
-		if ( snakeDirection == Direction.LEFT )
+		else if ( snakeDirection == Direction.LEFT )
 		{
 			switch (nextMove)
 			{
@@ -269,14 +278,16 @@ public class Simulation
 					break;
 				case LEFT:
 					targetY++;
+					snakeDirection = Direction.DOWN;
 					break;
 				case RIGHT:
 					targetY--;
+					snakeDirection = Direction.UP;
 					break;
 			}
 		}
 		
-		if ( snakeDirection == Direction.RIGHT )
+		else //if ( snakeDirection == Direction.RIGHT )
 		{
 			switch (nextMove)
 			{
@@ -285,9 +296,11 @@ public class Simulation
 					break;
 				case LEFT:
 					targetY--;
+					snakeDirection = Direction.UP;
 					break;
 				case RIGHT:
 					targetY++;
+					snakeDirection = Direction.DOWN;
 					break;
 			}
 		}

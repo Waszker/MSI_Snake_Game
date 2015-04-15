@@ -3,6 +3,7 @@ package snake;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Random;
 
 import snakemain.Simulation;
 
@@ -50,7 +51,7 @@ public final class Snake
 		return score;
 	}
 	
-	
+	Random r = new Random(); //TODO: Delete
 	/**
 	 * <p>
 	 * Performs snake decision process depending on genotype.
@@ -63,7 +64,12 @@ public final class Snake
 	public Movement decision(Simulation.Field[][] neighbourhood)
 	{
 		//TODO: Complete decision process
-		return Movement.FORWARD;
+		
+		int det = r.nextInt(7);
+		if ( det < 5 )return Movement.FORWARD;
+		if ( det == 5 )return Movement.RIGHT;
+		return Movement.LEFT;
+		
 	}
 	
 	/**

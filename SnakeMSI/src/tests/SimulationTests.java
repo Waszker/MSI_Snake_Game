@@ -44,7 +44,7 @@ public class SimulationTests
 		{
 			render(s.getMap());
 			s.singleStep();
-			Thread.sleep(1000);
+			Thread.sleep(300);
 		}
 	}
 
