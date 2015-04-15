@@ -87,7 +87,7 @@ public class MainWindow extends JFrame
 		for (int i = 0; i < rowSize; i++)
 			for (int j = 0; j < colSize; j++)
 			{
-				displays[i * j + j] = new Display(
+				displays[i * colSize + j] = new Display(
 						(j % 2 + i % 2) % 2 == 0 ? Color.WHITE : Color.GRAY);
 				wrapper.add(displays[i * j + j]);
 			}
