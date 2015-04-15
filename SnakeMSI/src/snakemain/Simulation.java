@@ -22,7 +22,7 @@ public class Simulation
 	/* CONSTANTS */
 	private static final int MAPX = 30;
 	private static final int MAPY = 15;
-	private static final int APPLESCORE = 1000;
+	private static final int APPLESCORE = 2500;
 	private static final int MOVESWITHOUTAPPLELIMIT = MAPX*MAPY;
 	
 	/* ENUMS */
