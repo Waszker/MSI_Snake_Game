@@ -71,11 +71,12 @@ public class Simulation
 	public void resetSimulation(Snake s, long randSeed)
 	{
 		r.setSeed(randSeed);
-		snakeTail.clear();
 		snakeDead = false;
 		snakeDirection = Direction.UP;
 		snakePosX = MAPX/2;
 		snakePosY = MAPY/2;
+		snakeTail.clear();
+		snakeTail.add(new Point(snakePosX,snakePosY));
 		currentMovesWithoutApple = 0;
 		
 		snake = s;
@@ -108,12 +109,9 @@ public class Simulation
 	{
 		if ( snakeDead )return;
 		
-		Movement nextMove;
-		
-		getSnakePerspective();
-		nextMove = snake.decision(snakePerspective);
-		calculateTargetCoords(nextMove);
-		handleMovementToTargetCoords();
+		calculateSnakePerspective();
+		calculateTargetCoords(snake.decision(snakePerspective));
+		handleMovementToTarget();
 	}
 	
 	
@@ -136,7 +134,7 @@ public class Simulation
 		generateNewApple();
 	}
 	
-	private void getSnakePerspective()
+	private void calculateSnakePerspective()
 	{
 		if ( snakeDirection == Direction.UP )
 		{
@@ -167,26 +165,28 @@ public class Simulation
 		}
 	}
 	
-	private void handleMovementToTargetCoords()
+	private void handleMovementToTarget()
 	{
+		//snake hits an obstacle
 		if ( map[targetX][targetY] == Field.SNAKE || map[targetX][targetY] == Field.WALL )
 		{
 			snakeDead = true;
 			return;
 		}
 		
+		//snake finds an apple
 		if ( map[targetX][targetY] == Field.APPLE )
 		{
 			currentMovesWithoutApple = 0;
 			snake.increaseScore(APPLESCORE);
-			doMove(targetX,targetY);
+			doMoveToTarget();
 			generateNewApple();
 		}
 		
+		//normal move
 		else
 		{
-			snake.increaseScore(1);
-			doMove(targetX, targetY);
+			doMoveToTarget();
 			if ( (++currentMovesWithoutApple) >= MOVESWITHOUTAPPLELIMIT )
 			{
 				snakeDead = true;
@@ -207,17 +207,20 @@ public class Simulation
 		map[x][y] = Field.APPLE;
 	}
 	
-	private void doMove(int tx,int ty)
+	private void doMoveToTarget()
 	{
 		Point last = snakeTail.get(snakeTail.size()-1);
 		
-		snakePosX = tx;
-		snakePosY = ty;
+		snakePosX = targetX;
+		snakePosY = targetY;
 		
 		map[snakePosX][snakePosY] = Field.SNAKE;
 		map[last.x][last.y] = Field.EMPTY; 
-		snakeTail.add(new Point(snakePosX,snakePosY));
+		
 		snakeTail.remove(last);
+		snakeTail.add(new Point(snakePosX,snakePosY));
+		
+		snake.increaseScore(1);
 	}
 	
 	private void calculateTargetCoords(Movement nextMove)
