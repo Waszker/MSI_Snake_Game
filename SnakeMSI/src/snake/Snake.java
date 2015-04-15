@@ -22,6 +22,7 @@ public final class Snake
 	private Genotype genotype;
 	private int score;
 	private Random r;
+	private Movement prev, prevprev;
 	
 	/* METHODS */
 	
@@ -38,6 +39,8 @@ public final class Snake
 	public void reset()
 	{
 		score = 0;
+		prev = Movement.FORWARD;
+		prevprev = Movement.FORWARD;
 	}
 	
 	public void increaseScore(int points)
@@ -63,8 +66,10 @@ public final class Snake
 	 */
 	public Movement decision(Simulation.Field[][] neighbourhood)
 	{
-		int[] sum = genotype.weightsForSituation(neighbourhood);
+		int[] sum = genotype.weightsForSituation(neighbourhood, prev, prevprev);
 		int result = 0;
+		Movement ret = null;
+		
 		for ( int i=1; i<Genotype.NUMACTIONS; i++ )
 		{
 			if ( (sum[i] > sum[result])||(sum[i] == sum[result] && r.nextBoolean()) )
@@ -74,12 +79,20 @@ public final class Snake
 		switch ( result )
 		{
 		case 0:
-			return Movement.FORWARD;
+			ret = Movement.FORWARD;
+			break;
 		case 1:
-			return Movement.RIGHT;
-		default:
-			return Movement.LEFT;
+			ret = Movement.RIGHT;
+			break;
+		case 2:
+			ret = Movement.LEFT;
+			break;
 		}
+		
+		prevprev = prev;
+		prev = ret;
+		
+		return ret;
 	}
 	
 	/**
