@@ -107,7 +107,7 @@ public class Session
 	
 	private void runSimulations(/*Display, simulationSpeed*/)
 	{
-		//TODO: Complete
+		//TODO: Complete simulations running and displaying
 		
 		/*
 		 * for each simulation s in simulations
