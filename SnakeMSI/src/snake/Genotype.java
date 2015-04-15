@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
+import snake.Snake.AppleposX;
+import snake.Snake.AppleposY;
 import snake.Snake.Movement;
 import snakemain.Simulation.Field;
 
@@ -17,7 +19,7 @@ import snakemain.Simulation.Field;
 final class Genotype
 {
 	/* CONSTANTS */
-	public  static final int NUMGENS = 22;
+	public  static final int NUMGENS = 26;
 	public  static final int NUMACTIONS = 3;
 	
 	private static final int MINMUTATEGENS = 2;
@@ -47,15 +49,16 @@ final class Genotype
 	 * @param neighbourhood nearest fields from snakes perspective
 	 * @param prev last move
 	 * @param prevprev move previous to last move
-	 * @return sumed weights for all 'active' genes
+	 * @return summed weights for all 'active' genes
 	 */
-	public int[] weightsForSituation(Field[][] neighbourhood, Movement prev, Movement prevprev)
+	public int[] weightsForSituation(Field[][] neighbourhood, Movement prev, Movement prevprev,
+			AppleposX apX, AppleposY apY)
 	{
 		for ( int i=0; i<NUMACTIONS; i++ )
 			sum[i] = 0;
 		
 		for ( int i=0; i<NUMGENS; i++ )
-			if ( geneActive(i, neighbourhood, prev, prevprev) )
+			if ( geneActive(i, neighbourhood, prev, prevprev, apX, apY) )
 				for ( int j=0; j<NUMACTIONS; j++ )
 					sum[j] += weights[i][j];
 		
@@ -164,7 +167,8 @@ final class Genotype
 			weights[i][j] += r.nextInt(2*MAXMUTATION+1)-MAXMUTATION-1;
 	}
 	
-	private boolean geneActive(int i, Field[][] neighbourhood, Movement prev, Movement prevprev)
+	private boolean geneActive(int i, Field[][] neighbourhood, Movement prev, Movement prevprev,
+			AppleposX applePosX, AppleposY applePosY)
 	{
 		if ( i < 4 )
 		{
@@ -190,11 +194,18 @@ final class Genotype
 			if ( i == 17 && prev == Movement.RIGHT )return true;
 			if ( i == 18 && prev == Movement.LEFT )return true;
 		}
-		else
+		else if ( i < 22)
 		{
 			if ( i == 19 && prevprev == Movement.FORWARD )return true;
 			if ( i == 20 && prevprev == Movement.RIGHT )return true;
 			if ( i == 21 && prevprev == Movement.LEFT )return true;
+		}
+		else
+		{
+			if ( i == 22 && applePosY == AppleposY.APF )return true;
+			if ( i == 23 && applePosY == AppleposY.APB )return true;
+			if ( i == 24 && applePosX == AppleposX.APR )return true;
+			if ( i == 25 && applePosX == AppleposX.APL )return true;
 		}
 		
 		return false;
@@ -230,5 +241,11 @@ final class Genotype
 	 * 19) Previous to last action was FORWARD
 	 * 20) Previous to last action was RIGHT
 	 * 21) Previous to last action was LEFT
+	 * 
+	 * SMELL:
+	 * 22) Apple is somewhere in front of the snake
+	 * 23) Apple is somewhere behind the snake
+	 * 24) Apple is somewhere on the right
+	 * 25) Apple is somewhere on the left
 	 */
 }

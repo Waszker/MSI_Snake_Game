@@ -17,6 +17,8 @@ public final class Snake
 {
 	/* ENUMS */
 	public enum Movement { FORWARD, LEFT, RIGHT };
+	public enum AppleposX { APL, APR };
+	public enum AppleposY { APF, APB };
 	
 	/* VARIABLES */
 	private Genotype genotype;
@@ -75,9 +77,9 @@ public final class Snake
 	 * @param neighbourhood 9x9 array of map bytes oriented according to snake direction
 	 * @return the result action
 	 */
-	public Movement decision(Simulation.Field[][] neighbourhood)
+	public Movement decision(Simulation.Field[][] neighbourhood, AppleposX apx, AppleposY apy)
 	{
-		int[] sum = genotype.weightsForSituation(neighbourhood, prev, prevprev);
+		int[] sum = genotype.weightsForSituation(neighbourhood, prev, prevprev, apx, apy);
 		int result = 0;
 		Movement ret = null;
 		

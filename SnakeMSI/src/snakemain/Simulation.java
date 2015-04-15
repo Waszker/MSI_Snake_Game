@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import snake.Snake;
+import snake.Snake.AppleposX;
+import snake.Snake.AppleposY;
 import snake.Snake.Movement;
 
 /**
@@ -51,6 +53,8 @@ public class Simulation
 	private int currentMovesWithoutApple;
 	
 	private int targetX, targetY;
+	private AppleposX applePosX = null;
+	private AppleposY applePosY = null;
 	
 	/* METHODS */
 	
@@ -110,7 +114,8 @@ public class Simulation
 		if ( snakeDead )return;
 		
 		calculateSnakePerspective();
-		calculateTargetCoordsAndDirection(snake.decision(snakePerspective));
+		calculateApplePos();
+		calculateTargetCoordsAndDirection(snake.decision(snakePerspective, applePosX, applePosY));
 		handleMovementToTarget();
 	}
 	
@@ -132,6 +137,69 @@ public class Simulation
 		
 		map[snakePosX][snakePosY] = Field.SNAKE;
 		generateNewApple();
+	}
+	
+	private void calculateApplePos()
+	{
+		applePosX = null;
+		applePosY = null;
+		
+		int ax = 0, ay = 0; //pos of apple
+		for ( ax=0; ax<MAPX; ax++ )
+			for ( ay=0; ay<MAPY; ay++ )
+				if ( map[ax][ay] == Field.APPLE )
+					break;
+		
+		int apxV = ax - snakePosX;
+		int apyV = ay - snakePosY;
+		
+		if ( snakeDirection == Direction.UP )
+		{
+			if ( apxV < 0 )
+				applePosX = AppleposX.APL;
+			if ( apxV > 0 )
+				applePosX = AppleposX.APR;
+			if ( apyV < 0 )
+				applePosY = AppleposY.APF;
+			if ( apyV > 0 )
+				applePosY = AppleposY.APB;
+		}
+		
+		if ( snakeDirection == Direction.DOWN )
+		{
+			if ( apxV > 0 )
+				applePosX = AppleposX.APL;
+			if ( apxV < 0 )
+				applePosX = AppleposX.APR;
+			if ( apyV > 0 )
+				applePosY = AppleposY.APF;
+			if ( apyV < 0 )
+				applePosY = AppleposY.APB;
+		}
+		
+		if ( snakeDirection == Direction.RIGHT )
+		{
+			if ( apxV < 0 )
+				applePosY = AppleposY.APB;
+			if ( apxV > 0 )
+				applePosY = AppleposY.APF;
+			if ( apyV < 0 )
+				applePosX = AppleposX.APL;
+			if ( apyV > 0 )
+				applePosX = AppleposX.APR;
+		}
+		
+		if ( snakeDirection == Direction.LEFT )
+		{
+			if ( apxV > 0 )
+				applePosY = AppleposY.APB;
+			if ( apxV < 0 )
+				applePosY = AppleposY.APF;
+			if ( apyV > 0 )
+				applePosX = AppleposX.APL;
+			if ( apyV < 0 )
+				applePosX = AppleposX.APR;
+		}
 	}
 	
 	private void calculateSnakePerspective()
