@@ -98,7 +98,7 @@ public final class Snake implements Serializable
 	 */
 	public Movement decision(Simulation.Field[][] neighbourhood, AppleposX apx, AppleposY apy)
 	{
-		int[] sum = genotype.weightsForSituation(neighbourhood, prev, prevprev, apx, apy);
+		long[] sum = genotype.weightsForSituation(neighbourhood, prev, prevprev, apx, apy);
 		int result = 0;
 		Movement ret = null;
 		

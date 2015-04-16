@@ -36,8 +36,8 @@ final class Genotype implements Serializable
 	private static final Random r = new Random();
 	
 	/* VARIABLES */
-	private int[][] weights = null; //visible only for Genotype and Snake
-	private int[] sum = null;
+	private long[][] weights = null; //visible only for Genotype and Snake
+	private long[] sum = null;
 	
 	
 	
@@ -46,8 +46,8 @@ final class Genotype implements Serializable
 	
 	protected Genotype()
 	{
-		weights = new int[NUMGENS][NUMACTIONS];
-		sum = new int[NUMACTIONS];
+		weights = new long[NUMGENS][NUMACTIONS];
+		sum = new long[NUMACTIONS];
 	}
 	
 	/**
@@ -56,7 +56,7 @@ final class Genotype implements Serializable
 	 * @param prevprev move previous to last move
 	 * @return summed weights for all 'active' genes
 	 */
-	public int[] weightsForSituation(Field[][] neighbourhood, Movement prev, Movement prevprev,
+	public long[] weightsForSituation(Field[][] neighbourhood, Movement prev, Movement prevprev,
 			AppleposX apX, AppleposY apY)
 	{
 		for ( int i=0; i<NUMACTIONS; i++ )
