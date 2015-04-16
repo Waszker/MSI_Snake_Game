@@ -35,8 +35,13 @@ public class Simulation implements Serializable
 	private enum Direction { UP, DOWN, LEFT, RIGHT };
 	
 	/* EMBEDDED CLASSES */
-	private class Point
+	private class Point implements Serializable
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3285622517245997361L;
+		
 		public int x, y;
 		public Point(int x, int y)
 		{
