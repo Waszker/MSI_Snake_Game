@@ -1,13 +1,20 @@
 package snakemain;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
 import snake.Snake;
 
-public final class Generation
+public final class Generation implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7974042914520978460L;
+	
+	
 	/* CONSTANTS */
 	private static final int PERCENTOFMUTATIONS = 50;
 	private static final Random r = new Random();
