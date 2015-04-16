@@ -1,5 +1,6 @@
 package snakemain;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -17,8 +18,12 @@ import snake.Snake.Movement;
  * </p>
  * @author Filip
  */
-public class Simulation
+public class Simulation implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 727087773292798741L;
 	/* CONSTANTS */
 	private static final int MAPX = 30;
 	private static final int MAPY = 15;
@@ -55,7 +60,6 @@ public class Simulation
 	private int targetX, targetY;
 	private AppleposX applePosX = null;
 	private AppleposY applePosY = null;
-	private boolean even = false;
 	
 	/* METHODS */
 	
@@ -122,25 +126,10 @@ public class Simulation
 		calculateTargetCoordsAndDirection(nextMovement);
 		handleMovementToTarget();
 		
-		if ( nextMovement == Movement.FORWARD )
-		{
-			if ( prev == Movement.FORWARD )
-			{
-				if ( prevprev == Movement.FORWARD )
-					snake.increaseScore(8);
-				else
-					snake.increaseScore(4);
-			}
-			else snake.increaseScore(2);
-		}
-		
-		else
-		{
-			if ( prev == Movement.FORWARD )
-				snake.increaseScore(1);
-			else if ( prevprev == Movement.FORWARD && (even=!even) )
-				snake.increaseScore(1);
-		}
+		snake.increaseScore(1);
+		if ( prevprev == Movement.FORWARD )snake.increaseScore(1);
+		else if ( prev == Movement.FORWARD )snake.increaseScore(1);
+		if ( nextMovement == Movement.FORWARD )snake.increaseScore(1);
 	}
 	
 	
@@ -269,8 +258,8 @@ public class Simulation
 		//snake finds an apple
 		if ( map[targetX][targetY] == Field.APPLE )
 		{
+			snake.increaseScore(APPLESCORE - currentMovesWithoutApple*4);
 			currentMovesWithoutApple = 0;
-			snake.increaseScore(APPLESCORE);
 			doMoveToTarget(false);
 			generateNewApple();
 		}
