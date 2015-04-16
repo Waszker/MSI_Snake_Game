@@ -108,7 +108,6 @@ public class MainWindow extends JFrame
 		this.add(Box.createRigidArea(new Dimension(WINDOW_WIDTH,
 				WINDOW_HEIGHT / 12)));
 		this.add(getDisplaysJPanel(2, 4), BorderLayout.CENTER);
-		// this.add(new Label("Snake Game"));
 		this.add(getWrapperPanel(), BorderLayout.SOUTH);
 
 	}

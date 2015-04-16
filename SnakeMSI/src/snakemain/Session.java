@@ -182,15 +182,15 @@ public class Session
 				{
 					s.singleStep();
 					if (null != display)
+					{
 						display.updateView(s.getMap());
-					try
-					{
-						Thread.sleep(1);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						try
+						{
+							Thread.sleep(100);
+						}
+						catch (InterruptedException e)
+						{
+						}
 					}
 				}
 			}
