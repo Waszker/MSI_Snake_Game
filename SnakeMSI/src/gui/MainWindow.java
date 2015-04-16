@@ -7,11 +7,15 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
@@ -101,15 +105,67 @@ public class MainWindow extends JFrame
 		startSimulation.setEnabled(isEnabled);
 		startSimulationWIthouGui.setEnabled(isEnabled);
 	}
+	
+	void saveSession() 
+	{
+		try
+		{
+			session.save("saved.gen");
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	void loadSession() 
+	{
+		try
+		{
+			session = new Session();
+			session.load("saved.gen");
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private void createLayout()
 	{
+		this.setJMenuBar(createMenu());
 		this.getContentPane().setLayout(new BorderLayout(20, 20));
 		this.add(Box.createRigidArea(new Dimension(WINDOW_WIDTH,
 				WINDOW_HEIGHT / 12)));
 		this.add(getDisplaysJPanel(2, 4), BorderLayout.CENTER);
 		this.add(getWrapperPanel(), BorderLayout.SOUTH);
 
+	}
+
+	private JMenuBar createMenu()
+	{
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.add(createMenuItems("File", "Save", "Load"));
+		// Add here new menus if needed
+
+		return menuBar;
+	}
+
+	private JMenu createMenuItems(String submenuName, String... itemNames)
+	{
+		JMenu menu = new JMenu(submenuName);
+
+		for (String name : itemNames)
+		{
+			JMenuItem item = new JMenuItem(name);
+			item.setActionCommand("MenuItem" + name);
+			item.addActionListener(actionListener);
+			menu.add(item);
+		}
+
+		return menu;
 	}
 
 	private JPanel getDisplaysJPanel(int rowSize, int colSize)

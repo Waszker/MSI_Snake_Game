@@ -3,8 +3,6 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-
 /**
  * <p>
  * Action listener for main GUI window.
@@ -41,6 +39,14 @@ public class MainWindowActionListener implements ActionListener
 
 			case MainWindow.START_ITERATION_ACTION_COMMAND:
 				startWaitingThread(window.runSimulation(false));
+				break;
+				
+			case "MenuItemSave":
+				window.saveSession();
+				break;
+				
+			case "MenuItemLoad":
+				window.loadSession();
 				break;
 		}
 
