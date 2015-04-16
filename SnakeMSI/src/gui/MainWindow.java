@@ -7,7 +7,11 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -38,8 +42,10 @@ public class MainWindow extends JFrame
 	/******************/
 	/* VARIABLES */
 	/******************/
+	public static boolean STOP_SIMULATION = false;
 	static final String START_SIMULATION_ACTION_COMMAND = "StartSimulation";
 	static final String START_ITERATION_ACTION_COMMAND = "StartIteration";
+	static final String STOP_ITERATION_ACTION_COMMAND = "StopIteration";
 	private static final long serialVersionUID = 2740437090361841747L;
 	private static final int generationSize = 8;
 	private final int WINDOW_WIDTH = 640;
@@ -48,7 +54,7 @@ public class MainWindow extends JFrame
 	private Display[] displays;
 	private JSpinner numberOfIterationsJSpinner, numberOfGenerationsJSpinner;
 	private JProgressBar simulationProgress;
-	private JButton startSimulation, startSimulationWIthouGui;
+	private JButton startSimulation, startSimulationWithouGui, stopSimulation;
 	private Session session;
 	private MainWindowActionListener actionListener;
 
@@ -77,6 +83,7 @@ public class MainWindow extends JFrame
 			@Override
 			public void run()
 			{
+				STOP_SIMULATION = false;
 				int generations = (Integer) numberOfGenerationsJSpinner
 						.getValue();
 				int iterations = (Integer) numberOfIterationsJSpinner
@@ -103,33 +110,47 @@ public class MainWindow extends JFrame
 	void setButtonsEnabled(boolean isEnabled)
 	{
 		startSimulation.setEnabled(isEnabled);
-		startSimulationWIthouGui.setEnabled(isEnabled);
+		startSimulationWithouGui.setEnabled(isEnabled);
+		stopSimulation.setEnabled(!isEnabled);
 	}
-	
-	void saveSession() 
+
+	void saveSession()
 	{
 		try
 		{
-			session.save("saved.gen");
+			FileOutputStream fileOut = new FileOutputStream("saved.gen");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(session);
+			out.close();
+			fileOut.close();
+			System.out.printf("Serialized data is saved in saved.gen");
 		}
-		catch (IOException e)
+		catch (IOException i)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			i.printStackTrace();
 		}
 	}
-	
-	void loadSession() 
+
+	void loadSession()
 	{
 		try
 		{
-			session = new Session();
-			session.load("saved.gen");
+			FileInputStream fileIn = new FileInputStream("saved.gen");
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			session = (Session) in.readObject();
+			in.close();
+			fileIn.close();
 		}
-		catch (IOException e)
+		catch (IOException i)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			i.printStackTrace();
+			return;
+		}
+		catch (ClassNotFoundException c)
+		{
+			System.out.println("Session class not found");
+			c.printStackTrace();
+			return;
 		}
 	}
 
@@ -233,17 +254,26 @@ public class MainWindow extends JFrame
 	{
 		JPanel buttonWrapper = new JPanel();
 		buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.Y_AXIS));
+
 		JButton button = startSimulation = new JButton("Start simulation");
 		button.setActionCommand(START_SIMULATION_ACTION_COMMAND);
 		button.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonWrapper.add(button);
 		button.addActionListener(actionListener);
-		button = startSimulationWIthouGui = new JButton(
+
+		button = startSimulationWithouGui = new JButton(
 				"Start simulation wihout gui");
 		button.setActionCommand(START_ITERATION_ACTION_COMMAND);
 		button.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonWrapper.add(button);
 		button.addActionListener(actionListener);
+
+		button = stopSimulation = new JButton("Stop simulation");
+		button.setActionCommand(STOP_ITERATION_ACTION_COMMAND);
+		button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		buttonWrapper.add(button);
+		button.addActionListener(actionListener);
+		button.setEnabled(false);
 
 		return buttonWrapper;
 	}

@@ -41,6 +41,11 @@ public class MainWindowActionListener implements ActionListener
 				startWaitingThread(window.runSimulation(false));
 				break;
 				
+			case MainWindow.STOP_ITERATION_ACTION_COMMAND:
+				MainWindow.STOP_SIMULATION = true;
+				window.setButtonsEnabled(true);
+				break;
+				
 			case "MenuItemSave":
 				window.saveSession();
 				break;

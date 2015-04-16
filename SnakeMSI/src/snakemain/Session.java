@@ -1,6 +1,7 @@
 package snakemain;
 
 import gui.Display;
+import gui.MainWindow;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -24,8 +25,7 @@ public class Session implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = -4086000904018584540L;
-	
-	
+
 	/* VARIABLES */
 	private Generation currentGeneration = new Generation();
 	private Simulation[] simulations = null;
@@ -65,13 +65,14 @@ public class Session implements Serializable
 			JProgressBar progress, boolean isGui)
 	{
 		resetScores();
-		while ((numberOfIterations--) > 0)
+		while ((numberOfIterations--) > 0 && !MainWindow.STOP_SIMULATION)
 		{
 			resetSimulations();
 			runSimulations(displays, isGui);
 			progress.setValue(progress.getValue() + 1);
 		}
-		currentGeneration.evaluate();
+		if (!MainWindow.STOP_SIMULATION)
+			currentGeneration.evaluate();
 	}
 
 	/* PRIVATE AUXILIARY FUNCTIONS */
@@ -127,7 +128,7 @@ public class Session implements Serializable
 			@Override
 			public void run()
 			{
-				while (!s.isSnakeDead())
+				while (!s.isSnakeDead() && !MainWindow.STOP_SIMULATION)
 				{
 					s.singleStep();
 					if (null != display)
