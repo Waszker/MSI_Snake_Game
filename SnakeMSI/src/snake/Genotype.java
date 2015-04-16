@@ -66,7 +66,7 @@ final class Genotype implements Serializable
 			if ( geneActive(i, neighbourhood, prev, prevprev, apX, apY) )
 				for ( int j=0; j<NUMACTIONS; j++ )
 				{
-					sum[j] += weights[i][j] * (i > 22 ? 3 : 1); //* (...) wzmacnia węch
+					sum[j] += weights[i][j];
 				}
 		
 		return sum;
