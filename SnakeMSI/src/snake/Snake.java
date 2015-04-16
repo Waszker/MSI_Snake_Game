@@ -23,6 +23,9 @@ public final class Snake implements Serializable
 	public enum AppleposX { APL, APR };
 	public enum AppleposY { APF, APB };
 	
+	/* CONSTANS */
+	private static final int MAXANOMALY = 20;
+	
 	/* VARIABLES */
 	private Genotype genotype;
 	private long score;
@@ -99,6 +102,9 @@ public final class Snake implements Serializable
 	public Movement decision(Simulation.Field[][] neighbourhood, AppleposX apx, AppleposY apy)
 	{
 		long[] sum = genotype.weightsForSituation(neighbourhood, prev, prevprev, apx, apy);
+		for ( int i=0; i<sum.length; i++ )
+			sum[i] += r.nextInt(MAXANOMALY) - MAXANOMALY/2;
+		
 		int result = 0;
 		Movement ret = null;
 		
