@@ -96,10 +96,10 @@ public class Session implements Serializable
 	private void runSimulations(final Display[] displays, boolean isGui)
 	{
 		Integer i = 0;
-		Thread[] threads = new Thread[displays.length];
+		Thread[] threads = new Thread[simulations.length];
 		for (final Simulation s : simulations)
 		{
-			threads[i] = runSimulation(s, (isGui ? displays[i] : null));
+			threads[i] = runSimulation(s, (isGui ? (i < displays.length ? displays[i] : null) : null));
 			i++;
 		}
 

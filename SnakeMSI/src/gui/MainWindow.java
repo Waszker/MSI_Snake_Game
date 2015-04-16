@@ -42,7 +42,7 @@ public class MainWindow extends JFrame
 	/******************/
 	/* VARIABLES */
 	/******************/
-	public static boolean STOP_SIMULATION = false;
+	public static boolean STOP_SIMULATION = true;
 	static final String START_SIMULATION_ACTION_COMMAND = "StartSimulation";
 	static final String START_ITERATION_ACTION_COMMAND = "StartIteration";
 	static final String STOP_ITERATION_ACTION_COMMAND = "StopIteration";
@@ -100,6 +100,7 @@ public class MainWindow extends JFrame
 					progress += iterations;
 					simulationProgress.setValue(progress);
 				}
+				STOP_SIMULATION = true;
 			}
 		});
 		simulation.start();
@@ -140,6 +141,7 @@ public class MainWindow extends JFrame
 			session = (Session) in.readObject();
 			in.close();
 			fileIn.close();
+			System.out.printf("Data load successful!");
 		}
 		catch (IOException i)
 		{
@@ -152,6 +154,12 @@ public class MainWindow extends JFrame
 			c.printStackTrace();
 			return;
 		}
+	}
+	
+	void createNewPopulationSize(int size)
+	{
+		session.init(size);
+		System.out.println("New population size set to: " + size);
 	}
 
 	private void createLayout()
@@ -168,7 +176,7 @@ public class MainWindow extends JFrame
 	private JMenuBar createMenu()
 	{
 		JMenuBar menuBar = new JMenuBar();
-		menuBar.add(createMenuItems("File", "Save", "Load"));
+		menuBar.add(createMenuItems("File", "New", "Save", "Load"));
 		// Add here new menus if needed
 
 		return menuBar;
