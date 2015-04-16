@@ -1,8 +1,6 @@
 package snake;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.Random;
 
 import snake.Snake.AppleposX;
@@ -16,8 +14,14 @@ import snakemain.Simulation.Field;
  * </p>
  * @author Filip
  */
-final class Genotype
+final class Genotype implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6390183010525011551L;
+	
+	
 	/* CONSTANTS */
 	public  static final int NUMGENS = 26;
 	public  static final int NUMACTIONS = 3;
@@ -133,33 +137,7 @@ final class Genotype
 				weights[j][k] = g.weights[j][k];
 			crossed[j] = true;
 		}
-	}
-	
-	/**
-	 * <p>Saves genotype to given output stream.</p>
-	 * @throws IOException
-	 */
-	protected void save(OutputStream o) throws IOException
-	{
-		for ( int i=0; i<NUMGENS; i++)
-			for ( int j=0; j<weights[i].length; j++ )
-				o.write(weights[i][j]);
-	}
-	
-	/**
-	 * <p>Loads genotype from given input stream.</p>
-	 * @throws IOException 
-	 */
-	protected void load(InputStream in) throws IOException
-	{
-		for ( int i=0; i<NUMGENS; i++)
-			for ( int j=0; j<weights[i].length; j++ )
-				weights[i][j] = (byte)in.read();
-	}
-	
-	
-	
-	
+	}	
 	
 	/* PRIVATE AUXILIARY FUNCTIONS */
 	private void mutateGene(int i)

@@ -2,14 +2,7 @@ package snakemain;
 
 import gui.Display;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Random;
 
 import javax.swing.JProgressBar;
@@ -25,8 +18,14 @@ import snake.Snake;
  * 
  * @author Filip
  */
-public class Session
+public class Session implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4086000904018584540L;
+	
+	
 	/* VARIABLES */
 	private Generation currentGeneration = new Generation();
 	private Simulation[] simulations = null;
@@ -49,56 +48,6 @@ public class Session
 		simulations = new Simulation[populationSize];
 		for (int i = 0; i < populationSize; i++)
 			simulations[i] = new Simulation();
-	}
-
-	/**
-	 * <p>
-	 * Saves current generation (with every snake genotype) to file.
-	 * </p>
-	 * 
-	 * @param file
-	 *            path to target file
-	 * @throws IOException
-	 */
-	public void save(String file) throws IOException
-	{
-		File output = new File(file);
-		if (!output.exists())
-			output.createNewFile();
-
-		OutputStream out = new FileOutputStream(output);
-		Snake[] snakes = currentGeneration.getPopulation();
-
-		for (Snake s : snakes)
-			s.save(out);
-
-		out.close();
-	}
-
-	/**
-	 * <p>
-	 * Loads generation state from file.
-	 * </p>
-	 * 
-	 * @param file
-	 *            path to target file
-	 * @throws IOException
-	 */
-	public void load(String file) throws IOException
-	{
-		File input = new File(file);
-		InputStream in = new FileInputStream(input);
-		List<Snake> listOfSnakes = new LinkedList<Snake>();
-
-		while (in.available() > 0)
-		{
-			Snake next = new Snake();
-			next.load(in);
-			listOfSnakes.add(next);
-		}
-
-		currentGeneration.setPopulation((Snake[]) listOfSnakes.toArray());
-		in.close();
 	}
 
 	/**

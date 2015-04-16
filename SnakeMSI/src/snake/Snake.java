@@ -1,8 +1,6 @@
 package snake;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.Random;
 
 import snakemain.Simulation;
@@ -13,8 +11,13 @@ import snakemain.Simulation;
  * </p>
  * @author Filip
  */
-public final class Snake
+public final class Snake implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 817520418058916942L;
+
 	/* ENUMS */
 	public enum Movement { FORWARD, LEFT, RIGHT };
 	public enum AppleposX { APL, APR };
@@ -160,23 +163,5 @@ public final class Snake
 	public void init()
 	{
 		genotype.init();
-	}
-	
-	/**
-	 * <p>Saves genotype to given output stream.</p>
-	 * @throws IOException
-	 */
-	public void save(OutputStream o) throws IOException
-	{
-		genotype.save(o);
-	}
-	
-	/**
-	 * <p>Loads genotype from given input stream.</p>
-	 * @throws IOException 
-	 */
-	public void load(InputStream in) throws IOException
-	{
-		genotype.load(in);
 	}
 }
