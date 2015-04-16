@@ -3,6 +3,8 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+
 /**
  * <p>
  * Action listener for main GUI window.
@@ -27,19 +29,42 @@ public class MainWindowActionListener implements ActionListener
 		super();
 		this.window = window;
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		switch (e.getActionCommand())
 		{
 			case MainWindow.START_SIMULATION_ACTION_COMMAND:
-				window.runSimulation();
+				startWaitingThread(window.runSimulation(true));
 				break;
 
 			case MainWindow.START_ITERATION_ACTION_COMMAND:
+				startWaitingThread(window.runSimulation(false));
 				break;
 		}
 
+	}
+
+	private void startWaitingThread(final Thread threadToWaitFor)
+	{
+		window.setButtonsEnabled(false);
+		new Thread(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				try
+				{
+					threadToWaitFor.join();
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				window.setButtonsEnabled(true);
+			}
+		}).start();
 	}
 }

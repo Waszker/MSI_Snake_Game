@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JProgressBar;
+
 import snake.Snake;
 
 /**
@@ -110,13 +112,15 @@ public class Session
 	 * @param simulationSpeed
 	 *            speed of the simulation preview, ignored when display is null
 	 */
-	public void singleCycle(Display[] displays, int numberOfIterations)
+	public void singleCycle(Display[] displays, int numberOfIterations,
+			JProgressBar progress, boolean isGui)
 	{
 		resetScores();
-		while ( (numberOfIterations--) > 0)
+		while ((numberOfIterations--) > 0)
 		{
 			resetSimulations();
-			runSimulations(displays);
+			runSimulations(displays, isGui);
+			progress.setValue(progress.getValue() + 1);
 		}
 		currentGeneration.evaluate();
 	}
@@ -131,7 +135,7 @@ public class Session
 		for (int i = 0; i < currentSnakes.length; i++)
 			simulations[i].resetSimulation(currentSnakes[i], randSeed);
 	}
-	
+
 	private void resetScores()
 	{
 		final Snake[] currentSnakes = currentGeneration.getPopulation();
@@ -139,16 +143,17 @@ public class Session
 			currentSnakes[i].resetScore();
 	}
 
-	private void runSimulations(final Display[] displays)
+	private void runSimulations(final Display[] displays, boolean isGui)
 	{
 		Integer i = 0;
 		Thread[] threads = new Thread[displays.length];
 		for (final Simulation s : simulations)
 		{
-			threads[i] = runSimulation(s, displays[i++]);
+			threads[i] = runSimulation(s, (isGui ? displays[i] : null));
+			i++;
 		}
 
-		for(Thread t : threads)
+		for (Thread t : threads)
 		{
 			try
 			{
@@ -176,7 +181,8 @@ public class Session
 				while (!s.isSnakeDead())
 				{
 					s.singleStep();
-					display.updateView(s.getMap());
+					if (null != display)
+						display.updateView(s.getMap());
 					try
 					{
 						Thread.sleep(1);
@@ -190,7 +196,7 @@ public class Session
 			}
 		}));
 		thread.start();
-		
+
 		return thread;
 	}
 }

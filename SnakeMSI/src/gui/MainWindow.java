@@ -1,8 +1,11 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.Box;
@@ -10,6 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 
@@ -38,7 +42,9 @@ public class MainWindow extends JFrame
 	private final int WINDOW_HEIGHT = 480;
 	private final String title = "Snake Game";
 	private Display[] displays;
-	private JSpinner numberOfIterationsJSpinner;
+	private JSpinner numberOfIterationsJSpinner, numberOfGenerationsJSpinner;
+	private JProgressBar simulationProgress;
+	private JButton startSimulation, startSimulationWIthouGui;
 	private Session session;
 	private MainWindowActionListener actionListener;
 
@@ -60,29 +66,50 @@ public class MainWindow extends JFrame
 		createLayout();
 	}
 
-	public void runSimulation()
+	public Thread runSimulation(final boolean shouldUseDisplay)
 	{
-		new Thread(new Runnable()
+		Thread simulation = new Thread(new Runnable()
 		{
-
 			@Override
 			public void run()
 			{
-				session.singleCycle(displays,
-						(Integer) numberOfIterationsJSpinner.getValue());
+				int generations = (Integer) numberOfGenerationsJSpinner
+						.getValue();
+				int iterations = (Integer) numberOfIterationsJSpinner
+						.getValue();
+				int progress = 0;
+
+				simulationProgress.setValue(progress);
+				simulationProgress.setMaximum(generations * iterations);
+
+				while ((generations--) > 0)
+				{
+					session.singleCycle(displays, iterations,
+							simulationProgress, shouldUseDisplay);
+					progress += iterations;
+					simulationProgress.setValue(progress);
+				}
 			}
-		}).start();
+		});
+		simulation.start();
+
+		return simulation;
+	}
+
+	void setButtonsEnabled(boolean isEnabled)
+	{
+		startSimulation.setEnabled(isEnabled);
+		startSimulationWIthouGui.setEnabled(isEnabled);
 	}
 
 	private void createLayout()
 	{
-		this.getContentPane().setLayout(
-				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		this.getContentPane().setLayout(new BorderLayout(20, 20));
 		this.add(Box.createRigidArea(new Dimension(WINDOW_WIDTH,
 				WINDOW_HEIGHT / 12)));
-		this.add(getDisplaysJPanel(2, 4));
+		this.add(getDisplaysJPanel(2, 4), BorderLayout.CENTER);
 		// this.add(new Label("Snake Game"));
-		this.add(getButtonsPanel());
+		this.add(getWrapperPanel(), BorderLayout.SOUTH);
 
 	}
 
@@ -97,43 +124,73 @@ public class MainWindow extends JFrame
 			{
 				displays[i * colSize + j] = new Display(
 						(j % 2 + i % 2) % 2 == 0 ? Color.WHITE : Color.GRAY);
-				wrapper.add(displays[i * j + j]);
+				wrapper.add(displays[i * colSize + j]);
 			}
 
 		return wrapper;
 	}
 
-	private JPanel getButtonsPanel()
+	private JPanel getWrapperPanel()
 	{
 		JPanel wrapper = new JPanel();
-		wrapper.setLayout(new GridLayout(1, 2));
+		wrapper.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 0;
+		c.gridy = 0;
+		wrapper.add(getJComponentsPanel(), c);
+
+		c.gridx = 1;
+		c.gridy = 0;
+		wrapper.add(getButtonsPanel(), c);
+
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weightx = 0.0;
+		c.gridwidth = 2;
+		wrapper.add(simulationProgress = new JProgressBar(), c);
+
+		return wrapper;
+	}
+
+	private JPanel getJComponentsPanel()
+	{
 		JPanel generationsPanel = new JPanel();
 		generationsPanel.setLayout(new BoxLayout(generationsPanel,
 				BoxLayout.Y_AXIS));
-		generationsPanel.setBorder(new TitledBorder("Iterations"));
 		numberOfIterationsJSpinner = new JSpinner();
-		numberOfIterationsJSpinner.setMaximumSize(new Dimension(60, 20));
+		// numberOfIterationsJSpinner.setMaximumSize(new Dimension(60, 20));
 		numberOfIterationsJSpinner.setAlignmentX(Component.CENTER_ALIGNMENT);
+		numberOfIterationsJSpinner.setBorder(new TitledBorder("Iterations"));
 		generationsPanel.add(numberOfIterationsJSpinner);
 
+		numberOfGenerationsJSpinner = new JSpinner();
+		numberOfGenerationsJSpinner.setAlignmentX(Component.CENTER_ALIGNMENT);
+		numberOfGenerationsJSpinner.setBorder(new TitledBorder("Generations"));
+		generationsPanel.add(numberOfGenerationsJSpinner);
+
+		return generationsPanel;
+	}
+
+	private JPanel getButtonsPanel()
+	{
 		JPanel buttonWrapper = new JPanel();
 		buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.Y_AXIS));
-		JButton button = new JButton("Start simulation");
+		JButton button = startSimulation = new JButton("Start simulation");
 		button.setActionCommand(START_SIMULATION_ACTION_COMMAND);
 		button.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonWrapper.add(button);
 		button.addActionListener(actionListener);
-		button = new JButton("Start iteration");
+		button = startSimulationWIthouGui = new JButton(
+				"Start simulation wihout gui");
 		button.setActionCommand(START_ITERATION_ACTION_COMMAND);
 		button.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonWrapper.add(button);
 		button.addActionListener(actionListener);
 
-		wrapper.add(generationsPanel);
-		wrapper.add(buttonWrapper);
-
-		return wrapper;
+		return buttonWrapper;
 	}
 
 }
